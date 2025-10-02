@@ -1,34 +1,36 @@
 SIEM Home Lab
 
-This repository contains a home lab setup for building a Security Information and Event Management (SIEM) platform using the Elastic Stack (Elasticsearch, Logstash, Kibana) with Filebeat. It demonstrates how to collect, parse, and visualize security logs — specifically focusing on detecting SSH brute-force attacks.
+This repository contains a home lab environment for building a Security Information and Event Management (SIEM) platform using the Elastic Stack (Elasticsearch, Logstash, Kibana) with Filebeat. The project demonstrates log collection, parsing, and visualization of security events, focusing on detecting SSH brute-force attacks.
 
 ⸻
 
-🚀 Features
-	•	Docker-based ELK stack (Elasticsearch, Logstash, Kibana)
-	•	Filebeat integration to ship logs into the pipeline
-	•	Custom Logstash pipeline for parsing syslog/SSH events
-	•	Python log generator for simulating attacks
-	•	Saved Kibana dashboards for visualizing alerts
+Overview
+
+The lab includes:
+	•	A Docker-based Elastic Stack (Elasticsearch, Logstash, Kibana).
+	•	Filebeat integration for log shipping.
+	•	A custom Logstash pipeline for parsing syslog and SSH events.
+	•	A Python log generator to simulate brute-force attempts.
+	•	Exported Kibana dashboards to visualize alerts.
 
 ⸻
 
-📂 Repository Structure
-	•	docker-compose.yml → spins up Elasticsearch, Logstash, Kibana
-	•	configs/logstash/pipeline/logstash.conf → log parsing pipeline
-	•	scripts/generate_syslog.py → sends demo SSH brute-force logs
-	•	dashboards/ssh_bruteforce_dashboard.ndjson → exported Kibana dashboard
-	•	README.md → project documentation
+Repository Structure
+	•	docker-compose.yml – starts Elasticsearch, Logstash, and Kibana containers.
+	•	configs/logstash/pipeline/logstash.conf – defines the Logstash pipeline for syslog parsing.
+	•	scripts/generate_syslog.py – generates simulated SSH brute-force logs.
+	•	dashboards/ssh_bruteforce_dashboard.ndjson – exported Kibana dashboard.
+	•	README.md – project documentation.
 
 ⸻
 
-🛠 Setup
-	1.	Clone this repo and navigate to the project folder.
-	2.	Start the Elastic Stack with Docker Compose:
+Setup Instructions
+	1.	Clone the repository and navigate into the project directory.
+	2.	Start the Elastic Stack:
 docker compose up -d
-	3.	Install Filebeat (on macOS with Homebrew):
+	3.	Install Filebeat (macOS example using Homebrew):
 brew install filebeat
-	4.	Update the Filebeat config (/opt/homebrew/etc/filebeat/filebeat.yml):
+	4.	Update the Filebeat configuration at /opt/homebrew/etc/filebeat/filebeat.yml:
 filebeat.inputs:
 	•	type: log
 enabled: true
@@ -42,47 +44,48 @@ hosts: [“localhost:5514”]
 brew services start filebeat
 	6.	Generate test logs:
 python3 scripts/generate_syslog.py
-	7.	Open Kibana at:
+	7.	Access Kibana at:
 http://localhost:5601
 
 ⸻
 
-📊 Dashboards & Detections
+Dashboards and Alerts
 
-This lab includes a Kibana dashboard to visualize SSH brute-force alerts in real time.
+A Kibana dashboard is included to visualize SSH brute-force alerts.
 
 Visualizations
-	•	Top Attacker IPs – top source IPs attempting brute-force SSH logins
-	•	Alerts Over Time – a time-series view of alert counts to identify spikes
+	•	Top Attacker IPs – displays the source IPs responsible for failed SSH login attempts.
+	•	Alerts Over Time – shows the frequency of brute-force attempts across a time range.
 
 Import Instructions
-	1.	In Kibana, go to:
-Stack Management → Saved Objects → Import
+	1.	In Kibana, navigate to:
+Stack Management > Saved Objects > Import
 	2.	Select the file:
 dashboards/ssh_bruteforce_dashboard.ndjson
-	3.	If a Data View Conflict appears:
-	•	Re-associate with your existing data view for alerts-ssh-*
-	•	Ensure the timestamp field is @timestamp
+	3.	If prompted with a Data View Conflict:
+	•	Associate with the data view for alerts-ssh-*
+	•	Confirm that the timestamp field is set to @timestamp
 
 Usage
-	•	Navigate to Dashboard → SSH Brute-Force Alerts
-	•	Adjust the time range (e.g., Last 15 minutes or Last 1 hour)
-	•	Run the log generator again to simulate new attacks
-	•	Refresh the dashboard to see alerts populate
+	•	Open the dashboard titled SSH Brute-Force Alerts
+	•	Adjust the time range (for example: Last 15 minutes or Last 1 hour)
+	•	Run the log generator to simulate new alerts
+	•	Refresh the dashboard to observe updates
 
 ⸻
 
-🎯 Learning Objectives
+Learning Outcomes
 
-This project is designed to:
-	•	Reinforce hands-on SIEM skills
-	•	Show practical log collection and parsing
-	•	Build detection logic for brute-force attacks
-	•	Demonstrate dashboards that highlight security threats
+This project demonstrates the following skills:
+	•	Building and managing a SIEM pipeline
+	•	Configuring log collection with Filebeat
+	•	Writing Logstash parsing rules
+	•	Generating synthetic attack data for testing
+	•	Creating and exporting detection dashboards in Kibana
 
 ⸻
 
-📌 Notes
-	•	This is a home lab setup for educational purposes.
-	•	Dashboards and rules can be extended to detect other attacks (web logs, Windows events, etc.).
-	•	The exported dashboard is included so others can import and view without recreating manually.
+Notes
+	•	This lab is intended for educational and demonstration purposes.
+	•	The detection pipeline can be extended to support additional log sources such as web server logs or Windows event logs.
+	•	The exported Kibana dashboard is included for reproducibility.
