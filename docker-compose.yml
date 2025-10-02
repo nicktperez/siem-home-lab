@@ -29,5 +29,6 @@ services:
     ports:
       - "5514:5514/udp"
       - "5044:5044"
+      - "5000:5000"
     depends_on:
       - elasticsearch

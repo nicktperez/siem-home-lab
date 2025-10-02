@@ -96,12 +96,30 @@ Phase 6 – Threat Intelligence Enrichment (Planned)
 	•	Integration with AlienVault OTX or AbuseIPDB
 	•	Tag alerts with known malicious indicators
 
-Phase 7 – AI and Emerging Threats (Planned)
-	•	Ingest logs related to AI systems (prompt injection attempts, API misuse)
-	•	Simulate AI-powered attacks such as automated phishing or credential stuffing with LLMs
-	•	Experiment with anomaly detection using machine learning or AI-assisted correlation
-	•	Build dashboards that track AI-related incidents
-	•	Document case studies of AI attack simulation and detection
+Phase 7 – AI and Emerging Threats: Prompt Injection (Completed)
+
+This phase introduces AI-specific log ingestion and detection to keep the lab aligned with emerging security challenges. The initial focus is on prompt injection detection — a growing risk in LLM-powered applications.
+
+Completed work:
+	•	Added scripts/generate_prompt_injection.py, a Python generator that produces synthetic AI prompt logs (normal + injection attempts).
+	•	Created a dedicated Logstash pipeline (configs/logstash/pipeline/ai_prompt.conf) to ingest JSON prompt logs and apply regex-based detection.
+	•	Configured pipeline to index all prompts into ai-prompts-* and suspicious prompts into alerts-ai-*.
+	•	Updated docker-compose.yml to expose Logstash on TCP port 5000 for AI prompt ingestion.
+	•	Verified detections by generating simulated events and viewing them in Kibana.
+
+Detection logic:
+	•	Regex-based detection flags prompt text containing phrases like:
+	•	“ignore your previous instructions”
+	•	“output the admin password”
+	•	“print the API key”
+	•	“exfiltrate”
+	•	Alerts are tagged with ai_prompt_injection and written to alerts-ai-*.
+
+Next steps in AI & Emerging Threats:
+	•	Expand detection beyond regex with token-length anomalies and semantic similarity.
+	•	Add telemetry for LLM API misuse (e.g., excessive tokens, unusual rate of calls).
+	•	Simulate AI-generated phishing attempts.
+	•	Enrich detections with external threat intelligence.
 
 ⸻
 
