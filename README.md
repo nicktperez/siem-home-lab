@@ -63,13 +63,31 @@ Roadmap
 The project is being developed in phases to simulate the growth of a SIEM in an enterprise setting.
 
 Phase 1 – Foundation (Completed)
-	•	Deploy Elastic Stack with Docker
-	•	Configure Filebeat to ship macOS system logs
-	•	Write Logstash pipeline to parse SSH failed logins
-	•	Simulate SSH brute-force attacks with Python script
-	•	Detect repeated failed logins with Logstash aggregation
-	•	Output alerts to a dedicated index
-	•	Build and export Kibana dashboards (Top Attacker IPs, Alerts Over Time)
+
+This phase established the core SIEM environment using the Elastic Stack (Elasticsearch, Logstash, Kibana) and Filebeat. It provided the initial end-to-end pipeline for collecting logs, parsing them, generating detections, and visualizing results.
+
+Completed work:
+	•	Deployed a Docker-based Elastic Stack consisting of Elasticsearch, Logstash, and Kibana.
+	•	Created docker-compose.yml for reproducible stack deployment.
+	•	Configured Filebeat on macOS to ship local system logs (/var/log/*.log, /private/var/log/*.log) into Logstash.
+	•	Built a custom Logstash pipeline (configs/logstash/pipeline/logstash.conf) that parses syslog messages and extracts relevant fields such as message, host, and src_ip.
+	•	Developed a Python script scripts/generate_syslog.py to simulate SSH brute-force attacks by sending multiple failed login events.
+	•	Implemented Logstash aggregation logic to detect repeated failed SSH login attempts from the same source IP within a short time window.
+	•	Configured outputs so that detections are indexed into a dedicated alerts index (alerts-ssh-*) while raw logs flow into syslog-*.
+	•	Verified pipeline functionality by generating synthetic logs and confirming successful indexing in Elasticsearch.
+	•	Built and exported a Kibana dashboard with two visualizations:
+	•	Top Attacker IPs – bar chart showing IPs with the highest number of failed SSH attempts.
+	•	Alerts Over Time – time-series chart of brute-force alerts, showing spikes during simulated attacks.
+
+Detection logic:
+	•	Threshold-based detection: if a single IP generates ≥5 failed SSH logins in under 1 minute, an alert document is written to alerts-ssh-*.
+	•	Alerts include fields such as src_ip, message, and timestamp for investigation.
+	•	Analysts can correlate alert data with raw syslog entries (syslog-*) to review the attack pattern.
+
+Next steps from this foundation:
+	•	Extend ingestion to additional log sources (Windows, web server, firewall).
+	•	Develop more advanced detection rules beyond brute-force thresholds.
+	•	Build a “Global Security Overview” dashboard combining multiple sources.
 
 Phase 2 – Add More Log Sources (In Progress)
 	•	Windows logs via Winlogbeat or Sysmon
