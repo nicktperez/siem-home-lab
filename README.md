@@ -45,6 +45,10 @@ A separate pipeline ingests synthetic JSON prompt events and flags patterns asso
 
 These detections use intentionally simple threshold and pattern logic so the behavior remains understandable and testable.
 
+## Investigation case study
+
+- [Synthetic SSH brute-force investigation](docs/ssh-brute-force-case-study.md) documents the detection hypothesis, evidence pivots, analyst disposition, and response recommendations.
+
 ## Repository layout
 
 ```text
@@ -120,3 +124,4 @@ Elastic Stack, Filebeat, Logstash, Kibana, Docker, Python, log analysis, detecti
 ## Responsible use
 
 All attack data in this repository is synthetic and intended for controlled educational environments. Do not run testing activity against systems you do not own or have explicit permission to assess.
+\n## License\n\nMIT — see [LICENSE](LICENSE).\n
